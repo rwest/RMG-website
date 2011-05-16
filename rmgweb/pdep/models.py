@@ -57,3 +57,66 @@ class CollisionModel(models.Model):
     molWt = QuantityField(form_class=MolecularWeightField, verbose_name='Molecular weight')
     sigmaLJ = QuantityField(form_class=LJSigmaField, verbose_name='Lennard-Jones sigma')
     epsilonLJ = QuantityField(form_class=LJEpsilonField, verbose_name='Lennard-Jones epsilon')
+    
+################################################################################
+
+class States(models.Model):
+    """
+    A Django representation of a set of molecular degrees of freedom data.
+    """
+    pass
+    
+################################################################################
+
+class Translation(models.Model):
+    """
+    A Django representation of 3D translational degrees of freedom using an
+    infinite square well in the classical limit. Each translator is associated
+    with a States object; we represent this using a ForeignKey.
+    """
+    states = models.ForeignKey(States)
+    mass = models.FloatField(max_length=30)
+    
+################################################################################
+
+class RigidRotor(models.Model):
+    """
+    A Django representation of an 2D (linear) or 3D (nonlinear) external rigid 
+    rotor. For a linear rotor, only the inertiaA field is used; for a nonlinear 
+    rotor, all three inertia fields are used. Each rigid rotor is associated
+    with a States object; we represent this using a ForeignKey.
+    """
+    states = models.ForeignKey(States)
+    linear = models.BooleanField()
+    inertiaA = models.FloatField(max_length=30)
+    inertiaB = models.FloatField(max_length=30)
+    inertiaC = models.FloatField(max_length=30)
+    inertia_units = models.CharField(max_length=30)
+    symmetry = models.FloatField(max_length=30)
+    
+################################################################################
+
+class HarmonicOscillator(models.Model):
+    """
+    A Django representation of a 1D harmonic oscillator. Each oscillator is 
+    associated with a States object; we represent this using a ForeignKey.
+    """
+    states = models.ForeignKey(States)
+    frequency = models.FloatField(max_length=30)
+    frequency_units = models.CharField(max_length=30)
+    
+################################################################################
+
+class HinderedRotor(models.Model):
+    """
+    A Django representation of a 1D Pitzer-Gwynn hindered rotor. This hindered
+    rotor model is based on the simple cosine potential, and is defined by
+    a reduced moment of inertia and a barrier height. Each hindered rotor is 
+    associated with a States object; we represent this using a ForeignKey.
+    """
+    states = models.ForeignKey(States)
+    inertia = models.FloatField(max_length=30)
+    inertia_units = models.CharField(max_length=30)
+    barrier = models.FloatField(max_length=30)
+    barrier_units = models.CharField(max_length=30)
+    symmetry = models.FloatField(max_length=30)
