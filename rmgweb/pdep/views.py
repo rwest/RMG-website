@@ -31,6 +31,10 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import Http404, HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.forms.formsets import formset_factory
+
+from forms import *
 
 ################################################################################
 
@@ -41,4 +45,15 @@ def index(request):
     return render_to_response('measure.html', context_instance=RequestContext(request))
 
 def input(request):
-    raise Http404
+    """
+    A view called when a user wants to begin a new MEASURE calculation. The
+    view prompts the user for the input data needed for the calculation.
+    """
+    SpeciesFormSet = formset_factory(SpeciesForm)
+    if request.method == 'POST':
+        formset = SpeciesFormSet(request.POST, prefix='species')
+        if formset.is_valid():
+            return HttpResponseRedirect(reverse(index))
+    else:
+        formset = SpeciesFormSet(prefix='species')
+    return render_to_response('input.html', {'formset': formset}, context_instance=RequestContext(request))

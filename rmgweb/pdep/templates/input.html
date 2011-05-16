@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}MEASURE Input{% endblock %}
+
+{% block extrahead %}{% endblock %}
+
+{% block navbar_items %}
+<a href="{% url pdep.views.index %}">MEASURE</a> &raquo;
+<a href="{% url pdep.views.input %}">Input</a>
+{% endblock %}
+
+{% block sidebar_items %}
+{% endblock %}
+
+{% block page_title %}MEASURE Input{% endblock %}
+
+{% block page_body %}
+
+<form action="" method="POST">{% csrf_token %}
+{{ formset.management_form }}
+{% for form in formset %}
+<table style="margin: 8px; border: 1px solid #808080;">
+    <tr><th colspan="2">Species #{{ forloop.counter }}</th></tr>
+    {{ form.as_table }}
+    <tr><td colspan="2">Collision Parameters</td></tr>
+    {{ form.collisionModelFormSet.as_table }}
+</table>
+{% endfor %}
+<p><input type="submit" value="Submit" id="submit" /></p>
+</form>
+
+{% endblock %}
