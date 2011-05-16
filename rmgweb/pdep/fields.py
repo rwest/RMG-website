@@ -57,3 +57,71 @@ class NumberUnitsField(forms.MultiValueField):
                 raise forms.ValidationError('A numeric value is required.')
             return (value, units)
         return None
+
+################################################################################
+
+class EnergyField(NumberUnitsField):
+    """
+    A field for specifying an energy value with corresponding units.
+    """
+    
+    def __init__(self, *args, **kwargs):
+        choices = (
+            ('J/mol', 'J/mol'),
+            ('kJ/mol', 'kJ/mol'),
+            ('cal/mol', 'cal/mol'),
+            ('kcal/mol', 'kcal/mol'),
+            ('cm^-1', 'cm^-1'),
+        )
+        super(EnergyField, self).__init__(choices, *args, **kwargs)
+
+################################################################################
+
+class MolecularWeightField(NumberUnitsField):
+    """
+    A field for specifying a molecular weight value with corresponding units.
+    """
+    
+    def __init__(self, *args, **kwargs):
+        choices = (
+            ('u', 'u'),
+            ('g/mol', 'g/mol'),
+            ('kg/mol', 'kg/mol'),
+            ('g/kmol', 'g/kmol'),
+            ('kg/kmol', 'kg/kmol'),
+        )
+        super(MolecularWeightField, self).__init__(choices, *args, **kwargs)
+
+################################################################################
+
+class LJSigmaField(NumberUnitsField):
+    """
+    A field for specifying a Lennard-Jones sigma value with corresponding 
+    units.
+    """
+    
+    def __init__(self, *args, **kwargs):
+        choices = (
+            ('angstrom', 'angstrom'),
+            ('m', 'm'),
+        )
+        super(LJSigmaField, self).__init__(choices, *args, **kwargs)
+
+################################################################################
+
+class LJEpsilonField(NumberUnitsField):
+    """
+    A field for specifying a Lennard-Jones epsilon value with corresponding 
+    units.
+    """
+    
+    def __init__(self, *args, **kwargs):
+        choices = (
+            ('K', 'K'),
+            ('J/mol', 'J/mol'),
+            ('kJ/mol', 'kJ/mol'),
+            ('cal/mol', 'cal/mol'),
+            ('kcal/mol', 'kcal/mol'),
+            ('cm^-1', 'cm^-1'),
+        )
+        super(LJEpsilonField, self).__init__(choices, *args, **kwargs)
