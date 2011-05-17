@@ -28,35 +28,22 @@
 #
 ################################################################################
 
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.http import Http404, HttpResponseRedirect
+"""
+This module defines the Django forms used by the pdep app.
+"""
 
-from forms import *
+from django import forms
 
 ################################################################################
 
-def index(request):
-    """
-    The MEASURE homepage.
-    """
-    return render_to_response('measure.html', context_instance=RequestContext(request))
+INPUT_METHODS = (
+    ('wizard', 'Use this wizard to create a new MEASURE input file.'),
+    ('upload', 'Upload an existing MEASURE input file.'), 
+)
 
-def start(request):
+class InputMethodForm(forms.Form):
     """
-    A view called when a user wants to begin a new MEASURE calculation. This
-    view prompts the user for the method by which they want to input data.
+    A Django form giving the user the choice of whether to use the online
+    wizard to create the input file or to upload an input file.
     """
-    if request.method == 'POST':
-        form = InputMethodForm(request.POST)
-        if form.is_valid():
-            method = form.cleaned_data['method']
-            if method == 'wizard':
-                return HttpResponseRedirect('/measure/wizard')
-            elif method == 'upload':
-                return HttpResponseRedirect('/measure/upload')
-            else:
-                raise Http404('Invalid input method "{0}"; should be "wizard" or "upload".'.format(method))
-    else:
-        form = InputMethodForm()
-    return render_to_response('start.html', {'form': form}, context_instance=RequestContext(request))
+    method = forms.ChoiceField(label="How do you want to input information?", choices=INPUT_METHODS, widget=forms.RadioSelect)

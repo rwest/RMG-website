@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}New MEASURE Input{% endblock %}
+
+{% block extrahead %}{% endblock %}
+
+{% block navbar_items %}
+<a href="{% url pdep.views.index %}">MEASURE</a> &raquo;
+<a href="{% url pdep.views.start %}">Start</a>
+{% endblock %}
+
+{% block sidebar_items %}
+{% endblock %}
+
+{% block page_title %}New MEASURE Input{% endblock %}
+
+{% block page_body %}
+
+<form action="" method="POST">{% csrf_token %}
+{{ form.as_p }}
+<p><input type="submit" value="Next" id="next"/></p>
+</form>
+
+{% endblock %}
