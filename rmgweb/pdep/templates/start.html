@@ -2,7 +2,9 @@
 
 {% block title %}New MEASURE Input{% endblock %}
 
-{% block extrahead %}{% endblock %}
+{% block extrahead %}
+<link href="/media/pdep.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
 
 {% block navbar_items %}
 <a href="{% url pdep.views.index %}">MEASURE</a> &raquo;
