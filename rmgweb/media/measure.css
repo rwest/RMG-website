@@ -1,0 +1,25 @@
+@import url("/media/default.css");
+
+table.speciesInput {
+    border: 1px solid #808080;
+    margin: 8px;
+}
+
+table.speciesInput .section {
+    text-decoration: underline;
+}
+
+table.speciesInput .subsection {
+    text-decoration: underline;
+    padding-top: 1.2em;
+}
+
+table.speciesInput td.errorlist {
+    color: #FF0000;
+    list-style-type: none;
+    text-align: left;
+}
+
+table.speciesInput input, table.speciesInput select {
+    vertical-align: middle;
+}

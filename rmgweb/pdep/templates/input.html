@@ -2,7 +2,7 @@
 
 {% block title %}MEASURE Input{% endblock %}
 
-{% block extrahead %}{% endblock %}
+{% block extrahead %}<link href="/media/measure.css" rel="stylesheet" type="text/css"/>{% endblock %}
 
 {% block navbar_items %}
 <a href="{% url pdep.views.index %}">MEASURE</a> &raquo;
@@ -19,14 +19,18 @@
 <form action="" method="POST">{% csrf_token %}
 {{ formset.management_form }}
 {% for form in formset %}
-<table style="margin: 8px; border: 1px solid #808080;">
-    <tr><th colspan="2">Species #{{ forloop.counter }}</th></tr>
-    {{ form.as_table }}
-    <tr><td colspan="2">Collision Parameters</td></tr>
-    {{ form.collisionModelFormSet.as_table }}
+<table class="speciesInput">
+    <tr><th colspan="2" class="section">Species #{{ forloop.counter }}</th></tr>
+    <tr><td colspan="2" class="subsection">General Parameters</td></tr>
+    {% include "table_form.html" with form=form %}
+    <tr><td colspan="2" class="subsection">Collision Parameters</td></tr>
+    {{ form.collisionModelFormSet.management_form }}
+    {% for form1 in form.collisionModelFormSet %}
+        {% include "table_form.html" with form=form1 %}
+    {% endfor %}
 </table>
 {% endfor %}
-<p><input type="submit" value="Submit" id="submit" /></p>
+<div><input type="submit" value="Submit" id="submit" /></div>
 </form>
 
 {% endblock %}

@@ -1,0 +1,10 @@
+{% for error in form.non_field_errors %}
+    <tr><td>{{ error }}</td></tr>
+{% endfor %}
+
+{% for field in form.visible_fields %}
+    {% for error in field.errors %}
+    <tr><td></td><td class="errorlist">{{ error }}</td></tr>
+    {% endfor %}
+    <tr><th><label>{{ field.label }}:</label></th><td>{{ field }}</td></td>
+{% endfor %}
