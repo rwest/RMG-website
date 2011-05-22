@@ -125,7 +125,25 @@ def networkWizardReactions(request, networkKey):
     The second view in the input wizard, involving adding of reactions to the
     network.
     """
-    raise Http404
+    network = get_object_or_404(Network, pk=networkKey)
+    if request.method == 'POST':
+        if 'add_reactions' in request.POST:
+            post = request.POST.copy()
+            post['reaction_set-TOTAL_FORMS'] = int(post['reaction_set-TOTAL_FORMS']) + 5
+            formset = ReactionFormSet(post, instance=network)
+            # The above will still attempt to validate the form, so suppress the errors it generates
+            for form in formset: form._errors = {}
+        else:
+            formset = ReactionFormSet(request.POST, instance=network)
+            if formset.is_valid():
+                # Save the formset
+                formset.save()
+                # Go to next step
+                return HttpResponseRedirect(reverse(networkIndex,args=(network.pk,)))
+    else:
+        # Create the form
+        formset = ReactionFormSet(instance=network)
+    return render_to_response('networkWizardReactions.html', {'network': network, 'networkKey': networkKey, 'formset': formset}, context_instance=RequestContext(request))
 
 def networkEditor(request, networkKey):
     """

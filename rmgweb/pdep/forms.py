@@ -68,3 +68,15 @@ class SpeciesForm(forms.ModelForm):
         model = Species
     
 SpeciesFormSet = inlineformset_factory(Network, Species, form=SpeciesForm, can_delete=False, extra=10)
+
+################################################################################
+
+class ReactionForm(forms.ModelForm):
+    """
+    A Django form for inputting attributes for a chemical reaction. This form is 
+    based on the Reaction model.
+    """
+    class Meta:
+        model = Reaction
+    
+ReactionFormSet = inlineformset_factory(Network, Reaction, form=ReactionForm, can_delete=False, extra=10)
