@@ -223,3 +223,16 @@ class Species(models.Model):
     
     def __unicode__(self):
         return self.label
+
+################################################################################
+
+class Reaction(models.Model):
+    """
+    A Django representation of a high-pressure-limit chemical reaction.
+    """
+    network = models.ForeignKey(Network)
+    reactant1 = models.ForeignKey(Species, related_name='reactant1')
+    reactant2 = models.ForeignKey(Species, related_name='reactant2', blank=True, null=True)
+    product1 = models.ForeignKey(Species, related_name='product1')
+    product2 = models.ForeignKey(Species, related_name='product2', blank=True, null=True)
+    E0 = QuantityField(form_class=EnergyField, verbose_name='Transition-state energy')
