@@ -39,6 +39,8 @@ from django.db import models
 
 import rmgweb.settings as settings
 
+from fields import *
+
 ################################################################################
 
 class Network(models.Model):
@@ -207,4 +209,17 @@ class Network(models.Model):
         for line in self.inputText.splitlines():
             f.write(line + '\n')
         f.close()
-        
+
+################################################################################
+
+class Species(models.Model):
+    """
+    A Django representation of a chemical species.
+    """
+    network = models.ForeignKey(Network)
+    label = models.CharField(max_length=60)
+    structure = models.CharField(max_length=200)
+    E0 = QuantityField(form_class=EnergyField, verbose_name='Ground-state energy')
+    
+    def __unicode__(self):
+        return self.label
