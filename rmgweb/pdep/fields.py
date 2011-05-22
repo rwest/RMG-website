@@ -109,6 +109,8 @@ class NumberUnitsField(forms.MultiValueField):
             forms.FloatField(),
             forms.ChoiceField(choices=choices),
         )
+        # Don't forget to set the initial values, or form.has_changed() won't work properly!
+        kwargs['initial'] = ['', choices[0][0]]
         kwargs['widget'] = InputAndChoiceWidget(choices)
         super(NumberUnitsField, self).__init__(fields, **kwargs)
         

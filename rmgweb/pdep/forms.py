@@ -33,6 +33,7 @@ This module defines the Django forms used by the pdep app.
 """
 
 from django import forms
+from django.forms.models import inlineformset_factory
 
 from models import *
 
@@ -55,3 +56,15 @@ class UploadNetworkForm(forms.ModelForm):
     class Meta:
         model = Network
         fields = ('inputFile',)
+    
+################################################################################
+
+class SpeciesForm(forms.ModelForm):
+    """
+    A Django form for inputting attributes for a chemical species. This form is 
+    based on the Species model.
+    """
+    class Meta:
+        model = Species
+    
+SpeciesFormSet = inlineformset_factory(Network, Species, form=SpeciesForm, can_delete=False, extra=10)

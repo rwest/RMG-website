@@ -43,6 +43,8 @@ urlpatterns = patterns('rmgweb.pdep',
     
     # URLs for various methods of adding/editing input parameters
     (r'^networks/(?P<networkKey>[^/]+)/wizard$', 'views.networkWizard'),
+    (r'^networks/(?P<networkKey>[^/]+)/wizard/1$', 'views.networkWizardSpecies'),
+    (r'^networks/(?P<networkKey>[^/]+)/wizard/2$', 'views.networkWizardReactions'),
     (r'^networks/(?P<networkKey>[^/]+)/edit$', 'views.networkEditor'),
     (r'^networks/(?P<networkKey>[^/]+)/upload$', 'views.networkUpload'),
 

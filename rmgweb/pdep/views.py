@@ -93,7 +93,39 @@ def networkWizard(request, networkKey):
     A view called when a user wants to add/edit Network input parameters using
     the wizard.
     """
-    return Http404
+    return HttpResponseRedirect(reverse(networkWizardSpecies,args=(networkKey,)))
+
+def networkWizardSpecies(request, networkKey):
+    """
+    The first view in the input wizard, involving adding of species to the
+    network.
+    """
+    network = get_object_or_404(Network, pk=networkKey)
+    if request.method == 'POST':
+        if 'add_species' in request.POST:
+            post = request.POST.copy()
+            post['species_set-TOTAL_FORMS'] = int(post['species_set-TOTAL_FORMS']) + 5
+            formset = SpeciesFormSet(post, instance=network)
+            # The above will still attempt to validate the form, so suppress the errors it generates
+            for form in formset: form._errors = {}
+        else:
+            formset = SpeciesFormSet(request.POST, instance=network)
+            if formset.is_valid():
+                # Save the formset
+                formset.save()
+                # Go to next step
+                return HttpResponseRedirect(reverse(networkWizardReactions,args=(network.pk,)))
+    else:
+        # Create the form
+        formset = SpeciesFormSet(instance=network)
+    return render_to_response('networkWizardSpecies.html', {'network': network, 'networkKey': networkKey, 'formset': formset}, context_instance=RequestContext(request))
+
+def networkWizardReactions(request, networkKey):
+    """
+    The second view in the input wizard, involving adding of reactions to the
+    network.
+    """
+    raise Http404
 
 def networkEditor(request, networkKey):
     """

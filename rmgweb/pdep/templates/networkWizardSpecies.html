@@ -1,0 +1,66 @@
+{% extends "pdepbase.html" %}
+
+{% block title %}Input Wizard for {{ network.title }}{% endblock %}
+
+{% block navbar_items %}
+<a href="{% url pdep.views.index %}">MEASURE</a> &raquo;
+<a href="{% url pdep.views.networkIndex networkKey=networkKey %}">{{ network.title }}</a> &raquo;
+<a href="{% url pdep.views.networkWizard networkKey=networkKey %}">Wizard</a> &raquo;
+<a href="{% url pdep.views.networkWizardSpecies networkKey=networkKey %}">1. Define Species</a>
+{% endblock %}
+
+{% block sidebar_items %}
+{% endblock %}
+
+{% block page_title %}Input Wizard for {{ network.title }}{% endblock %}
+
+{% block page_body %}
+
+<h2>Step 1. Define the Species in the Network</h2>
+
+<p class="instructions">
+In the form below, please fill in each row with a unique label, a structure
+identifier (SMILES or InChI), and a ground-state energy for each species in
+your network. If you need additional rows, click the "Add more species" button.
+Leave extra rows blank.
+</p>
+
+<p class="instructions">
+Once you have finished entering species, click "Next" to continue.
+</p>
+
+<form action="" method="POST">{% csrf_token %}
+{{ formset.management_form }} 
+<table>
+    <tr>
+        <th>Label</th>
+        <th>Structure</th>
+        <th>Ground-state energy</th>
+    </tr>
+{% for form in formset %}
+    {% if form.non_field_errors %}
+    <tr>
+        <td colspan="3">{{ form.non_field_errors }}</td>
+    </tr>
+    {% endif %}
+    {% if form.label.errors or form.structure.errors or form.E0.errors %}
+    <tr>
+        <td>{{ form.label.errors }}</td>
+        <td>{{ form.structure.errors }}</td>
+        <td>{{ form.E0.errors }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td>{{ form.label }}</td>
+        <td>{{ form.structure }}</td>
+        <td>{{ form.E0 }}</td>
+    </tr>
+{% endfor %}
+    <tr>
+        <td colspan="3"><input type="submit" value="Add more species" id="submit" name="add_species"/></td>
+    </tr>
+</table>
+<p><input type="submit" value="Next" id="submit" name="next"/></p>
+</form>
+
+{% endblock %}
