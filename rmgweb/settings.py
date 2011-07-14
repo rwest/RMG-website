@@ -139,6 +139,12 @@ LOGIN_REDIRECT_URL = '/'
 #AUTH_PROFILE_MODULE = 'main.UserProfile'
 
 
+
+# Secret and per-configuration settings
+from secretsettings import TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
+from secretsettings import FACEBOOK_APP_ID, FACEBOOK_API_KEY, FACEBOOK_SECRET_KEY 
+from secretsettings import LINKEDIN_CONSUMER_KEY, LINKEDIN_CONSUMER_SECRET
+
 OPENID_REDIRECT_NEXT = '/accounts/openid/done/'
 
 OPENID_SREG = {"requred": "nickname, email, fullname",
