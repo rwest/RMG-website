@@ -35,6 +35,12 @@ Once you have successfully installed the above dependencies, fork and/or clone
 the git repository to your machine. At this point you will need a few more
 dependencies:
 
+To get the authentication working you will need to do this::
+
+    git submodule init
+    git submodule update
+    (sudo) pip install -R Django-Socialauth/requirements.txt
+
 jQuery (http://jquery.com/)
     Version 1.4.0 or later is recommended. For development you probably want
     the development (uncompressed) version. For a production environment you
