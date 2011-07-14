@@ -55,7 +55,7 @@ urlpatterns = patterns('rmgweb',
     (r'^profile$', 'main.views.editProfile'),
     (r'^signup', 'main.views.signup'),
     
-    (r'^user/(?P<username>\w+)$', 'main.views.viewProfile'),
+    (r'^user/(?P<username>[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*)$', 'main.views.viewProfile'),
 
     # Database
     (r'^database/', include('database.urls')),
