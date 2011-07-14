@@ -1,0 +1,3 @@
+[submodule "Django-Socialauth"]
+	path = Django-Socialauth
+	url = git://github.com/agiliq/Django-Socialauth.git
