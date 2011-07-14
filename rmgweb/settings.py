@@ -33,6 +33,7 @@ The Django settings for the RMG website.
 """
 
 import os.path
+import sys
 
 # Secret and per-configuration settings
 from secretsettings import DEBUG, TEMPLATE_DEBUG, PROJECT_PATH, DATABASE_PATH, DATABASES, SECRET_KEY
@@ -113,6 +114,9 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_PATH, 'templates'),
 )
+
+
+sys.path.append(os.path.realpath(os.path.join(PROJECT_PATH, '..','Django-Socialauth')))
 
 INSTALLED_APPS = (
     'django.contrib.auth',
