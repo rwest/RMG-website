@@ -55,6 +55,10 @@ urlpatterns = patterns('rmgweb',
     (r'^profile$', 'main.views.editProfile'),
     (r'^signup', 'main.views.signup'),
     
+    # socialauth login
+    (r'^accounts/', include('socialauth.urls')),
+    #(r'^$', 'socialauth.views.signin_complete'),
+    
     (r'^user/(?P<username>[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*)$', 'main.views.viewProfile'),
 
     # Database
