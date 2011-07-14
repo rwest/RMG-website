@@ -140,8 +140,8 @@ INSTALLED_APPS = (
 # Settings relating to user account management
 LOGIN_URL = '/accounts/login'
 LOGIN_REDIRECT_URL = '/'
-#AUTH_PROFILE_MODULE = 'main.UserProfile'
 
+AUTH_PROFILE_MODULE = 'main.UserProfile'
 
 
 # Secret and per-configuration settings
