@@ -182,7 +182,7 @@ FACEBOOK_EXTENDED_PERMISSIONS = (
     #'rsvp_event',
     #'sms',
     #'offline_access',
-    #'email',
+    'email',
     #'read_stream',
     #'user_about_me',
     #'user_activites',
