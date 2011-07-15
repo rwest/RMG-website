@@ -45,11 +45,18 @@ def index(request):
     """
     return render_to_response('index.html', context_instance=RequestContext(request))
 
+@login_required
 def login(request):
     """
     Called when the user wishes to log in to his/her account.
     """
-    return django.contrib.auth.views.login(request, template_name='login.html')
+    #return django.contrib.auth.views.login(request, template_name='login.html')
+    next = request.GET.get('next')
+    if next:
+        return HttpResponseRedirect(next)
+    else:
+        return HttpResponseRedirect('/')
+        
 
 def logout(request):
     """
