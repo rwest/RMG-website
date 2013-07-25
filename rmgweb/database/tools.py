@@ -218,6 +218,8 @@ def getKineticsDatabase(section, subsection):
                     db = family.groups
                 elif subsection[1] == 'rules':
                     db = family.rules
+                elif subsection[1] == 'TS_groups':
+                    db = family.transitionStates.groups
                 else:
                     label = '{0}/{1}'.format(family.label, subsection[1])
                     db = (d for d in family.depositories if d.label==label).next()

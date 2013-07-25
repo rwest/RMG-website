@@ -61,6 +61,7 @@ import rmgpy
 from rmgpy.data.base import Entry, LogicNode
 from rmgpy.data.thermo import ThermoDatabase
 from rmgpy.data.kinetics import *
+from rmgpy.data.kinetics.transitionstates import TSGroups
 from rmgpy.data.rmg import RMGDatabase
 
 from forms import *
@@ -337,6 +338,34 @@ def getKineticsTreeHTML(database, section, subsection, entries):
         if len(entry.children) > 0:
             html += '<ul id="children_{0}" class="kineticsSubTree">\n'.format(entry.index)
             html += getKineticsTreeHTML(database, section, subsection, entry.children)
+            html += '</ul>\n'
+        html += '</li>\n'
+    return html
+
+def getTransitionStateTreeHTML(database, section, subsection, entries):
+    """
+    Return a string of HTML markup used for displaying information about
+    TS entries in a given `database` as a tree of unordered lists.
+    """
+    html = ''
+    for entry in entries:
+        # Write current node
+        html += '<li class="kineticsEntry">\n'
+        html += '<div class="kineticsLabel">'
+        if len(entry.children) > 0:
+            html += '<img id="button_{0}" class="treeButton" src="/media/tree-collapse.png"/>'.format(entry.index)
+        else:
+            html += '<img class="treeButton" src="/media/tree-blank.png"/>'
+        html += '{0}. {1}\n'.format(entry.index, entry.label)
+        html += '<div class="kineticsData">\n'
+        if entry.data is not None and entry.data.distances:
+            for d in ['d12', 'd13', 'd23']:
+                html += '<span class="kineticsDatum">{0:.3f}</span> '.format(entry.data.distances[d])
+        html += '</div>\n'
+        # Recursively descend children (depth-first)
+        if len(entry.children) > 0:
+            html += '<ul id="children_{0}" class="kineticsSubTree">\n'.format(entry.index)
+            html += getTransitionStateTreeHTML(database, section, subsection, entry.children)
             html += '</ul>\n'
         html += '</li>\n'
     return html
@@ -795,7 +824,8 @@ def kinetics(request, section='', subsection=''):
     database = None
     try:
         database = getKineticsDatabase(section, subsection)
-    except ValueError:
+    except ValueError, e:
+        raise e
         pass
 
     if database is not None:
@@ -810,7 +840,35 @@ def kinetics(request, section='', subsection=''):
             # If there is a tree in this database, only consider the entries
             # that are in the tree
             entries0 = getDatabaseTreeAsList(database, database.top)
-            tree = '<ul class="kineticsTree">\n{0}\n</ul>\n'.format(getKineticsTreeHTML(database, section, subsection, database.top))
+            if subsection.endswith('TS_groups'):
+                tree = """
+<div class="kineticsData">
+    <span style="font-weight: bold;">Group additivity corrections (Angstrom)</span>
+</div>
+<div class="kineticsData">
+<span class="kineticsDatumLabel">d12</span>
+<span class="kineticsDatumLabel">d13</span>
+<span class="kineticsDatumLabel">d23</span>
+</div>
+"""
+                tree += '<ul class="kineticsTree">\n{0}\n</ul>\n'.format(getTransitionStateTreeHTML(database, section, subsection, database.top))
+            else:
+                tree = """
+<div class="kineticsData">
+    <span style="font-weight: bold;">Group additivity corrections (log scale)</span>
+</div>
+<div class="kineticsData">
+<span class="kineticsDatumLabel">300&nbsp;K</span>
+<span class="kineticsDatumLabel">400&nbsp;K</span>
+<span class="kineticsDatumLabel">500&nbsp;K</span>
+<span class="kineticsDatumLabel">600&nbsp;K</span>
+<span class="kineticsDatumLabel">800&nbsp;K</span>
+<span class="kineticsDatumLabel">1000&nbsp;K</span>
+<span class="kineticsDatumLabel">1500&nbsp;K</span>
+<span class="kineticsDatumLabel">2000&nbsp;K</span>
+</div>
+"""
+                tree += '<ul class="kineticsTree">\n{0}\n</ul>\n'.format(getKineticsTreeHTML(database, section, subsection, database.top))
         else:
             # If there is not a tree, consider all entries
             entries0 = database.entries.values()
@@ -845,6 +903,11 @@ def kinetics(request, section='', subsection=''):
                 'dataFormat': dataFormat,
             }
             if isinstance(database, KineticsGroups):
+                isGroupDatabase = True
+                entry['structure'] = getStructureMarkup(entry0.item)
+                entry['parent'] = entry0.parent
+                entry['children'] = entry0.children
+            elif isinstance(database, TSGroups):
                 isGroupDatabase = True
                 entry['structure'] = getStructureMarkup(entry0.item)
                 entry['parent'] = entry0.parent
